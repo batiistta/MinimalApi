@@ -1,4 +1,4 @@
-# 🚀 Próximas Features do Backend da Minimal API 🚀
+# 🚀 Próximas Features da Minimal API 🚀
 
 Neste documento, descrevemos as próximas features planejadas para serem implementadas no backend da nossa aplicação Minimal API:
 
