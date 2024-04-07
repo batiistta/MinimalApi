@@ -32,6 +32,8 @@ dotnet run
 - Entity Framework Core
 - Carter
 
+🔍 **Para verificar as próximas features planejadas, acesse o arquivo completo de features [aqui](feature.md).**
+
 ## 💡 Contribuição
 Agradecemos a todos os contribuidores que ajudaram a tornar este projeto possível! ✨
 
