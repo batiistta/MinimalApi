@@ -28,8 +28,8 @@ dotnet run
 
 ## 🧪 Tecnologias Utilizadas
 
--Entity Framework Core
--Carter
+- Entity Framework Core
+- Carter
 
 ## 💡 Contribuição
 Agradecemos a todos os contribuidores que ajudaram a tornar este projeto possível! ✨
