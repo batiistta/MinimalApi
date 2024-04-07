@@ -1,7 +1,8 @@
 ### Minimal API de Usuários
 
 ## 📋 Descrição
-Esta é uma aplicação Minimal API que fornece endpoints para operações CRUD (Create, Read, Update, Delete) em usuários. 
+Esta é uma aplicação Minimal API que fornece endpoints para operações CRUD (Create, Read, Update, Delete) em usuários.
+
 Esta aplicação utiliza o framework Carter para roteamento de endpoints e Entity Framework Core com um banco de dados em memória para persistência de dados.
 
 ## Endpoints
