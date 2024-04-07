@@ -1,4 +1,4 @@
-﻿namespace MinimalApi.Data
+﻿namespace MinimalApi.Model
 {
     public class User
     {

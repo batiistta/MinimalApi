@@ -1,5 +1,6 @@
 ﻿using Carter;
 using MinimalApi.Data;
+using MinimalApi.Model;
 
 namespace MinimalApi.Modules.Users
 {

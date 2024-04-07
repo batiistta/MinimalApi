@@ -1,4 +1,6 @@
-﻿namespace MinimalApi.Data
+﻿using MinimalApi.Model;
+
+namespace MinimalApi.Data
 {
     public static class Collections
     {

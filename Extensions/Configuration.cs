@@ -1,4 +1,6 @@
 ﻿using Carter;
+using Microsoft.EntityFrameworkCore;
+using MinimalApi.Data;
 
 namespace MinimalApi.Extensions
 {
@@ -9,6 +11,10 @@ namespace MinimalApi.Extensions
             builder.Services
                 .AddEndpointsApiExplorer()
                 .AddCarter()
+                .AddDbContext<DataContext>(options =>
+                {
+                    options.UseInMemoryDatabase("User");
+                })
                 .AddSwaggerGen();
         }
 
