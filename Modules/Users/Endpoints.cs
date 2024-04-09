@@ -1,4 +1,5 @@
 ﻿using Carter;
+using Microsoft.EntityFrameworkCore;
 using MinimalApi.Data;
 using MinimalApi.Model;
 
@@ -10,39 +11,92 @@ namespace MinimalApi.Modules.Users
         {
             var users = app.MapGroup("/api/v1/users");
 
-            users.MapGet("", () => Collections.Users);
-
-            users.MapGet("/{id:int}",  (HttpContext context, int id) =>
+            users.MapGet("/buscarUsuarios", async (DataContext db) =>
             {
-                var userResult = Collections.Users.FirstOrDefault(user => user.Id == id);
-                if (userResult == null)
+                try
                 {
-                    context.Response.StatusCode = StatusCodes.Status404NotFound;
-                    context.Response.WriteAsync("Usuário não encontrado");
-                    return;
+                    var usersResult = await db.Users.ToListAsync();
+
+                    return Results.Ok(usersResult);
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest("Erro ao buscar usuários. " + ex.Message);
+                }
+            });
+
+            users.MapGet("/{id}", async (int id, DataContext db) =>
+            {
+                try
+                {
+                    var userResult = await db.Users.FirstOrDefaultAsync(x => x.Id == id);
+                    return Results.Ok(userResult);
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest("Erro ao buscar usuário. " + ex.Message);
+                }
+            });
+
+            users.MapPost("/salvarUsuario", async (User user, DataContext db) =>
+            {
+                try
+                {
+                    db.Users.Add(user);
+                    db.SaveChanges();
+
+                    return Results.Created($"/api/v1/users/{user.Id}", user);
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest("Erro ao criar usuário. " + ex.Message);
+                }
+            });
+
+            users.MapPut("/{id}", async (int id, User userInput, DataContext db) =>
+            {
+                try
+                {
+                    var currentUser = await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+                    if (currentUser == null)
+                    {
+                        throw new Exception(Results.NotFound().ToString());
+                    }
+
+                    currentUser.FirstName = userInput.FirstName;
+                    currentUser.LastName = userInput.LastName;
+                    currentUser.BirthDate = userInput.BirthDate;
+
+                    await db.SaveChangesAsync();
+
+                    return Results.NoContent();
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest("Erro ao atualizar usuário. " + ex.Message);
                 }
 
-                context.Response.StatusCode = StatusCodes.Status200OK;
-                context.Response.WriteAsJsonAsync(userResult);
             });
 
-
-            users.MapPost("", (User user) => Collections.Users.Add(user));
-
-            users.MapPut("/{id}", (int id, User user) =>
+            users.MapDelete("/{id}", (int id, DataContext db) =>
             {
-                User currentUser = Collections.Users.FirstOrDefault(user => user.Id == id);
+                try
+                {
+                    var userForDeletion = db.Users.FirstOrDefault(u => u.Id == id);
 
-                currentUser.FirstName = user.FirstName;
-                currentUser.LastName = user.LastName;
-                currentUser.BirthDate = user.BirthDate;
-            });
+                    if (userForDeletion == null)
+                    {
+                        throw new Exception(Results.NotFound().ToString());
+                    }
+                    db.Users.Remove(userForDeletion);
+                    return Results.NoContent();
+                }
+                catch (Exception ex)
+                {
+                    return Results.BadRequest("Erro ao deletar usuário. " + ex.Message);
+                }
 
-            users.MapDelete("/{id}", (int id) =>
-            {
-                var userForDeletion = Collections.Users.FirstOrDefault(user => user.Id == id);
-
-                Collections.Users.Remove(userForDeletion);
             });
         }
     }
