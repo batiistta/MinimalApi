@@ -30,6 +30,10 @@ namespace MinimalApi.Modules.Users
                 try
                 {
                     var userResult = await db.Users.FirstOrDefaultAsync(x => x.Id == id);
+                    if (userResult == null)
+                    {
+                        return Results.NotFound("Usuário não encontrado.");
+                    }   
                     return Results.Ok(userResult);
                 }
                 catch (Exception ex)
@@ -61,7 +65,7 @@ namespace MinimalApi.Modules.Users
 
                     if (currentUser == null)
                     {
-                        throw new Exception(Results.NotFound().ToString());
+                        return Results.NotFound("Usuário não encontrado.");
                     }
 
                     currentUser.FirstName = userInput.FirstName;
@@ -87,7 +91,7 @@ namespace MinimalApi.Modules.Users
 
                     if (userForDeletion == null)
                     {
-                        throw new Exception(Results.NotFound().ToString());
+                        return Results.NotFound();
                     }
                     db.Users.Remove(userForDeletion);
                     return Results.NoContent();
