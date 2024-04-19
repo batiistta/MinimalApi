@@ -1,6 +1,7 @@
 ﻿using Carter;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.Data;
+using MinimalApi.RateLimit;
 
 namespace MinimalApi.Extensions
 {
@@ -15,7 +16,8 @@ namespace MinimalApi.Extensions
                 {
                     options.UseInMemoryDatabase("User");
                 })
-                .AddSwaggerGen();
+                .AddSwaggerGen()
+                .AddDistributedMemoryCache();
         }
 
         public static void RegisterMiddlewares(this WebApplication app)
@@ -25,7 +27,8 @@ namespace MinimalApi.Extensions
                 app.UseSwagger()
                     .UseSwaggerUI();
             }
-            app.MapCarter();
+            app.UseMiddleware<RateLimitMiddleware>();
+            app.MapCarter();            
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.Data;
 using MinimalApi.Model;
+using MinimalApi.RateLimit;
 
 namespace MinimalApi.Modules.Users
 {
@@ -11,7 +12,7 @@ namespace MinimalApi.Modules.Users
         {
             var users = app.MapGroup("/api/v1/users");
 
-            users.MapGet("/buscarUsuarios", async (DataContext db) =>
+            users.MapGet("/buscarUsuarios",[RateLimit(TimeWindowInSeconds = 30, MaxRequests = 20)] async (DataContext db) =>
             {
                 try
                 {
